@@ -1,0 +1,12 @@
+このフォルダに以下の 8 ファイルを置いてください。
+
+background.png
+tile.png
+tile_warning.png
+tile_falling.png
+tile_highscore_marker.png
+tile_obstacle_01.png
+tile_obstacle_02.png
+tile_obstacle_03.png
+
+このフォルダは theme_09 用です。
