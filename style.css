@@ -366,3 +366,32 @@ body {
     width: var(--player-width-mobile);
   }
 }
+
+@media (max-width: 600px) {
+  .game-board {
+    height: var(--board-height-mobile);
+  }
+
+  .tile {
+    width: var(--tile-width-mobile);
+  }
+
+  .player {
+    width: var(--player-width-mobile);
+  }
+}
+
+@media (max-width: 600px) {
+  .game-board {
+    height: var(--board-height-mobile);
+  }
+
+  .tile {
+    width: var(--tile-width-mobile);
+  }
+
+  .player {
+    width: var(--player-width-mobile);
+    bottom: 18px;
+  }
+}

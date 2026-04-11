@@ -324,23 +324,27 @@ export class GameRenderer {
     );
   }
 
-  calculateTilePosition(relativeIndex, cumulativeOffsetX) {
-    return {
-      x: this.renderConfig.baseX + cumulativeOffsetX * this.renderConfig.stepOffsetX,
-      y: this.renderConfig.baseY - relativeIndex * this.renderConfig.stepOffsetY
-    };
-  }
+calculateTilePosition(relativeIndex, cumulativeOffsetX) {
+  const metrics = this.getRenderMetrics();
 
-  calculateObstaclePosition(relativeIndex, cumulativeOffsetX, candidate) {
-    return {
-      x:
-        this.renderConfig.baseX +
-        (cumulativeOffsetX + candidate.x) * this.renderConfig.stepOffsetX,
-      y:
-        this.renderConfig.baseY -
-        (relativeIndex + candidate.y) * this.renderConfig.stepOffsetY
-    };
-  }
+  return {
+    x: metrics.baseX + cumulativeOffsetX * metrics.stepOffsetX,
+    y: metrics.baseY - relativeIndex * metrics.stepOffsetY
+  };
+}
+
+calculateObstaclePosition(relativeIndex, cumulativeOffsetX, candidate) {
+  const metrics = this.getRenderMetrics();
+
+  return {
+    x:
+      metrics.baseX +
+      (cumulativeOffsetX + candidate.x) * metrics.stepOffsetX,
+    y:
+      metrics.baseY -
+      (relativeIndex + candidate.y) * metrics.stepOffsetY
+  };
+}
 
   getTileImagePath(step, stepIndex, highScore) {
     const themeAsset = this.getThemeAsset(step.themeIndex);
@@ -450,4 +454,11 @@ export class GameRenderer {
       .replaceAll("<", "&lt;")
       .replaceAll(">", "&gt;");
   }
+
+  getRenderMetrics() {
+  const isMobile = window.innerWidth <= 600;
+  return isMobile
+    ? this.renderConfig.mobile
+    : this.renderConfig.desktop;
+}
 }

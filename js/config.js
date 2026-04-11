@@ -26,21 +26,25 @@ export const GAME_CONFIG = {
 };
 
 export const RENDER_CONFIG = {
-  baseX: 280,
-  baseY: 685,
-  stepOffsetX: 45,
-  stepOffsetY: 50,
+  desktop: {
+    baseX: 280,
+    baseY: 685,
+    stepOffsetX: 45,
+    stepOffsetY: 50
+  },
+
+  mobile: {
+    baseX: 180,
+    baseY: 600,
+    stepOffsetX: 40,
+    stepOffsetY: 44
+  },
 
   collapseStateRefreshMs: 50,
-
   tileMoveDurationMs: 220,
   tileDropDurationMs: 400,
   backgroundFadeDurationMs: 900,
 
-  /*
-    障害床の候補位置
-    正規床と同じ位置になる候補は自動で避ける。
-  */
   obstaclePositionCandidates: [
     { x: -1.0, y: 1.0 },
     { x: 1.0, y: 1.0 },
@@ -48,9 +52,6 @@ export const RENDER_CONFIG = {
     { x: 3.0, y: 1.0 }
   ],
 
-  /*
-    背景テーマは 100 スコアごとに切り替える
-  */
   scorePerTheme: 100
 };
 
