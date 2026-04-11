@@ -27,6 +27,19 @@ export class GameRenderer {
     this.activeBackgroundLayerKey = "A";
   }
 
+getRenderMetrics() {
+  const boardRect = this.dom.gameBoard.getBoundingClientRect();
+  const boardWidth = boardRect.width;
+  const boardHeight = boardRect.height;
+
+  return {
+    baseX: boardWidth * 0.5,
+    baseY: boardHeight * 0.99,
+    stepOffsetX: boardWidth * 0.08,
+    stepOffsetY: boardHeight * 0.07
+  };
+}
+
   clearPlayfield() {
     this.dom.worldLayer.innerHTML = "";
     this.tileElementsByStepId.clear();
@@ -454,11 +467,4 @@ calculateObstaclePosition(relativeIndex, cumulativeOffsetX, candidate) {
       .replaceAll("<", "&lt;")
       .replaceAll(">", "&gt;");
   }
-
-  getRenderMetrics() {
-  const isMobile = window.innerWidth <= 600;
-  return isMobile
-    ? this.renderConfig.mobile
-    : this.renderConfig.desktop;
-}
 }
