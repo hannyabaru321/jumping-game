@@ -34,7 +34,7 @@ getRenderMetrics() {
 
   return {
     baseX: boardWidth * 0.5,
-    baseY: boardHeight * 0.98,
+    baseY: boardHeight * 0.85,
     stepOffsetX: boardWidth * 0.10,
     stepOffsetY: boardHeight * 0.07
   };

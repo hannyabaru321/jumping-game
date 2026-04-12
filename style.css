@@ -18,7 +18,7 @@
 
   --player-width: 72px;
   --player-width-mobile: 64px;
-  --player-bottom: 26px;
+  --player-bottom: 140px;
 
   --tile-move-duration: 220ms;
   --tile-move-easing: cubic-bezier(0.22, 1, 0.36, 1);
@@ -376,6 +376,12 @@ body {
 }
 
 @media (max-width: 600px) {
+
+    :root {
+    --tile-anchor-y: -70%;
+    --player-bottom: 100px;
+  }
+
   .game-shell {
     width: 100%;
     height: 100dvh;

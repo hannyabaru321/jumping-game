@@ -98,8 +98,8 @@ function createThemeAssets(index) {
     tileHighScoreMarker: `${basePath}/tile_highscore_marker.png`,
     obstacleTiles: [
       { src: `${basePath}/tile_obstacle_01.png`, anchorYPercent: -68 },
-      { src: `${basePath}/tile_obstacle_02.png`, anchorYPercent: -84 },
-      { src: `${basePath}/tile_obstacle_03.png`, anchorYPercent: -76 }
+      { src: `${basePath}/tile_obstacle_02.png`, anchorYPercent: -78 },
+      { src: `${basePath}/tile_obstacle_03.png`, anchorYPercent: -68 }
     ]
   };
 }
