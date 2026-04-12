@@ -41,6 +41,10 @@ const dom = {
 const game = new Game(dom);
 game.initialize();
 
+sendAccessLogOncePerDay().catch((error) => {
+  console.error("access log error:", error);
+});
+
 // ==========================
 // 設定・モーダル関連DOM
 // ==========================
@@ -329,4 +333,50 @@ function escapeHtml(text) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+function getTodayString() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+async function sendAccessLogOncePerDay() {
+  const playerId = getOrCreatePlayerId();
+  const name = getCurrentPlayerName();
+  const today = getTodayString();
+  const localStorageKey = `jumping-game-last-access-log-date-${playerId}`;
+  const lastSentDate = localStorage.getItem(localStorageKey);
+
+  if (lastSentDate === today) {
+    return;
+  }
+
+  const response = await fetch(RANKING_API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify({
+      action: "logAccess",
+      playerId,
+      name,
+      date: today
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error("アクセスログ送信に失敗しました。");
+  }
+
+  const result = await response.json();
+
+  if (!result.ok) {
+    throw new Error(result.message || "アクセスログ送信に失敗しました。");
+  }
+
+  localStorage.setItem(localStorageKey, today);
 }
