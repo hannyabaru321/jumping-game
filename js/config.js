@@ -9,7 +9,11 @@
 export const GAME_CONFIG = {
   visibleStepCount: 8,
   reserveStepCount: 12,
+
   collapseDelayMs: 1000,
+  collapseDelayReductionPer100ScoreMs: 100,
+  collapseDelayMinMs: 500,
+
   warningTimeMs: 300,
   playerStartLane: "left",
   localStorageHighScoreKey: "jumping-game-high-score",
@@ -22,8 +26,44 @@ export const GAME_CONFIG = {
   */
   obstacleSpawnRateBase: 0.30,
   obstacleSpawnRateIncreasePer100Score: 0.07,
-  obstacleSpawnRateMaxScore: 1000
+  obstacleSpawnRateMaxScore: 1000,
+
+  /*
+    移動床
+    - 200点以上で出現開始
+    - 200〜299: 10%
+    - 300〜399: 20%
+    - 400〜499: 30%
+    - 500〜599: 40%
+    - 600以上: 50%
+    - 500点までは3段手前
+    - 500点超で2段手前
+  */
+  movingStepEnabledScore: 200,
+  movingStepSpawnRateBase: 0.10,
+  movingStepSpawnRateIncreasePer100Score: 0.10,
+  movingStepSpawnRateMax: 0.50,
+  movingStepTriggerDistanceEasy: 3,
+  movingStepTriggerDistanceHard: 2,
+  movingStepHardModeScore: 500
 };
+
+export const PLAYER_STORAGE_KEYS = {
+  name: "jumping-game-player-name",
+  characterId: "jumping-game-character-id",
+  playerId: "jumping-game-player-id"
+};
+
+export const CHARACTER_LIST = [
+  { id: "bear_01", name: "くま1", src: "assets/chara/bear_01.png" },
+  { id: "bear_02", name: "くま2", src: "assets/chara/bear_02.png" },
+  { id: "bear_03", name: "くま3", src: "assets/chara/bear_03.png" },
+  { id: "bear_04", name: "くま4", src: "assets/chara/bear_04.png" },
+  { id: "bear_05", name: "くま5", src: "assets/chara/bear_05.png" },
+  { id: "bear_06", name: "くま6", src: "assets/chara/bear_06.png" }
+];
+
+export const DEFAULT_CHARACTER_ID = "bear_01";
 
 export const RENDER_CONFIG = {
   desktop: {
@@ -50,9 +90,7 @@ export const RENDER_CONFIG = {
     { x: 1.0, y: 1.0 },
     { x: -3.0, y: 1.0 },
     { x: 3.0, y: 1.0 }
-  ],
-
-  scorePerTheme: 100
+  ]
 };
 
 export const PLAYER_ANIMATION_CONFIG = {
@@ -61,29 +99,20 @@ export const PLAYER_ANIMATION_CONFIG = {
   hopShiftPx: 6
 };
 
-export const ASSET_PATHS = {
-  player: "assets/player.png"
-};
-
 /*
   テーマ画像設定
-  0〜99 点は theme_00
-  100〜199 点は theme_01
-  ...
-  1000 点以上は最後の theme_10 を使う
+  0〜100    点は theme_00
+  101〜200  点は theme_01
+  201〜500  点は theme_02
+  501〜1000 点は theme_03
+  1001点〜  は theme_04
 */
 export const THEME_ASSETS = [
   createThemeAssets(0),
   createThemeAssets(1),
   createThemeAssets(2),
   createThemeAssets(3),
-  createThemeAssets(4),
-  createThemeAssets(5),
-  createThemeAssets(6),
-  createThemeAssets(7),
-  createThemeAssets(8),
-  createThemeAssets(9),
-  createThemeAssets(10)
+  createThemeAssets(4)
 ];
 
 function createThemeAssets(index) {

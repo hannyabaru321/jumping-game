@@ -1,6 +1,9 @@
 import {
+  CHARACTER_LIST,
+  DEFAULT_CHARACTER_ID,
   GAME_CONFIG,
   GAME_STATUS,
+  PLAYER_STORAGE_KEYS,
   RENDER_CONFIG,
   STEP_STATE
 } from "./config.js";
@@ -85,9 +88,17 @@ export class Game {
 
     this.stepManager.initialize(this.currentLane, this.score);
 
+    const selectedCharacterId =
+      localStorage.getItem(PLAYER_STORAGE_KEYS.characterId) ??
+      DEFAULT_CHARACTER_ID;
+
+    const selectedCharacter =
+      CHARACTER_LIST.find((item) => item.id === selectedCharacterId) ??
+      CHARACTER_LIST[0];
+
     this.renderer.clearPlayfield();
     this.renderer.initializeBackground(0);
-    this.renderer.createPlayer();
+    this.renderer.createPlayer(selectedCharacter.src);
     this.renderer.setPlayerDirection(this.currentLane);
     this.renderer.updateScore(this.score);
     this.renderer.updateHighScore(this.highScore);
@@ -124,6 +135,7 @@ export class Game {
     this.hasLeftStartPosition = true;
 
     this.stepManager.ensureFutureSteps(this.currentStepIndex, this.score);
+    this.stepManager.triggerMovingStepIfNeeded(this.currentStepIndex, this.score);
 
     this.renderer.setPlayerDirection(targetLane);
     this.renderer.playPlayerHop(targetLane);
@@ -151,11 +163,13 @@ export class Game {
     }
 
     this.stepManager.resetStepState(this.currentStepIndex);
-    this.collapseDeadline = performance.now() + this.gameConfig.collapseDelayMs;
+
+    const collapseDelayMs = this.getCollapseDelayMs();
+    this.collapseDeadline = performance.now() + collapseDelayMs;
 
     this.collapseTimerId = window.setTimeout(() => {
-      this.collapseCurrentStep();
-    }, this.gameConfig.collapseDelayMs);
+      this.collapseCurrentStep(collapseDelayMs);
+    }, collapseDelayMs);
   }
 
   startCollapseStateWatcher() {
@@ -192,7 +206,7 @@ export class Game {
     }, this.renderConfig.collapseStateRefreshMs);
   }
 
-  collapseCurrentStep() {
+  collapseCurrentStep(collapseDelayMs) {
     if (this.status !== GAME_STATUS.playing) {
       return;
     }
@@ -204,7 +218,21 @@ export class Game {
       this.gameConfig.visibleStepCount,
       this.highScore
     );
-    this.endGame("今いる床が崩れました。1秒以内に次の床へ進んでください。");
+    this.endGame(
+      `今いる床が崩れました。${(collapseDelayMs / 1000).toFixed(1)}秒以内に次の床へ進んでください。`
+    );
+  }
+
+  getCollapseDelayMs() {
+    const safeScore = Math.max(0, Number(this.score) || 0);
+    const scoreBand = Math.floor(safeScore / 100);
+    const reduction =
+      scoreBand * this.gameConfig.collapseDelayReductionPer100ScoreMs;
+
+    return Math.max(
+      this.gameConfig.collapseDelayMinMs,
+      this.gameConfig.collapseDelayMs - reduction
+    );
   }
 
   endGame(reasonText) {

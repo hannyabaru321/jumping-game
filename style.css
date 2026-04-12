@@ -415,3 +415,197 @@ html {
   height: 100%;
   overflow: hidden;
 }
+
+.screen {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 5000;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.chara-list {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.chara-item {
+  width: 60px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.chara-item.selected {
+  border: 2px solid red;
+}
+
+/* =========================
+  追加：ダイアログ用
+========================= */
+
+/* 共通オーバーレイ（既存を流用） */
+.modal {
+  position: absolute;
+  inset: 0;
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(16, 27, 47, 0.28);
+}
+
+.modal.hidden {
+  display: none;
+}
+
+/* 中身カード */
+.modal-card {
+  width: min(100%, 360px);
+  padding: 22px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.modal-card-settings {
+  width: min(100%, 390px);
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* タイトル */
+.modal-title {
+  margin: 0 0 18px;
+  font-size: 24px;
+  color: var(--text-main);
+}
+
+
+#inputName {
+  width: 100%;
+  max-width: 260px;
+  margin: 0 auto 18px;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  background: #eef1f7;
+  color: var(--text-main);
+  outline: none;
+}
+
+.settings-section {
+  width: 100%;
+  margin-top: 4px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.settings-label {
+  width: 100%;
+  max-width: 260px;
+  margin-bottom: 10px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+
+/* キャラ選択 */
+.chara-list-wrap {
+  width: 100%;
+  max-width: 260px;
+  height: 190px;
+  padding: 10px;
+  border-radius: 14px;
+  background: #eef1f7;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.chara-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  justify-items: center;
+}
+
+.chara-item {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 3px solid transparent;
+  background: rgba(255, 255, 255, 0.75);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chara-item:hover {
+  transform: scale(1.06);
+}
+
+.chara-item.selected {
+  border-color: #ffcc00;
+  box-shadow: 0 6px 14px rgba(255, 204, 0, 0.35);
+  transform: scale(1.06);
+}
+
+/* ボタン調整 */
+.modal-button-row {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.modal-card button {
+  margin: 0;
+}
+
+/* ランキング */
+#rankingList {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+#rankingList li {
+  background: #f3f6fa;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 横並び */
+.menu-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* サブボタン少し小さく */
+.sub-button {
+  flex: 1;
+  font-size: 14px;
+  padding: 10px;
+}

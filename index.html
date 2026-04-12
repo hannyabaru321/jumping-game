@@ -26,17 +26,70 @@
         <div id="worldLayer" class="world-layer"></div>
       </div>
 
+      <!-- スタート画面 -->
       <div id="overlay" class="overlay">
         <div class="overlay-card">
           <h1 class="overlay-title">Jumping Game</h1>
-          <button id="startButton" class="primary-button" type="button">スタート</button>
+
+          <!-- 1段目 -->
+          <button id="startButton" class="primary-button">スタート</button>
+
+          <!-- 2段目 -->
+          <div class="menu-row">
+            <button id="btnSettings" class="primary-button sub-button">設定</button>
+            <button id="btnRanking" class="primary-button sub-button">ランキング</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================
+           設定ダイアログ
+      ===================== -->
+<div id="modalSettings" class="modal hidden">
+  <div class="modal-card modal-card-settings">
+    <h2 class="modal-title">プレイヤー設定</h2>
+
+    <input id="inputName" type="text" placeholder="名前を入力" />
+
+    <div class="settings-section">
+      <div class="settings-label">キャラ選択</div>
+
+      <div class="chara-list-wrap">
+        <div class="chara-list">
+          <img src="assets/chara/bear_01.png" data-id="bear_01" class="chara-item" />
+          <img src="assets/chara/bear_02.png" data-id="bear_02" class="chara-item" />
+          <img src="assets/chara/bear_03.png" data-id="bear_03" class="chara-item" />
+          <img src="assets/chara/bear_04.png" data-id="bear_04" class="chara-item" />
+          <img src="assets/chara/bear_05.png" data-id="bear_05" class="chara-item" />
+          <img src="assets/chara/bear_06.png" data-id="bear_06" class="chara-item" />
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-button-row">
+      <button id="saveSettings" class="primary-button">保存</button>
+      <button class="backButton primary-button">戻る</button>
+    </div>
+  </div>
+</div>
+
+      <!-- =====================
+           ランキングダイアログ
+      ===================== -->
+      <div id="modalRanking" class="modal hidden">
+        <div class="modal-card">
+          <h2 class="modal-title">ランキング</h2>
+
+          <ul id="rankingList"></ul>
+
+          <button class="backButton primary-button">戻る</button>
         </div>
       </div>
     </div>
 
     <div class="controls">
-      <button id="leftButton" class="control-button" type="button">← 左へ進む</button>
-      <button id="rightButton" class="control-button" type="button">右へ進む →</button>
+      <button id="leftButton" class="control-button">← 左へ進む</button>
+      <button id="rightButton" class="control-button">右へ進む →</button>
     </div>
   </div>
 

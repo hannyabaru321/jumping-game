@@ -56,8 +56,81 @@ export class StepManager {
       lane,
       state: STEP_STATE.stable,
       themeIndex,
-      obstacle: this.createObstacleData(isStartStep, currentScore, themeIndex)
+      obstacle: this.createObstacleData(isStartStep, currentScore, themeIndex),
+      moveData: this.createMoveData(isStartStep, currentScore)
     };
+  }
+
+  createMoveData(isStartStep, currentScore) {
+    if (isStartStep) {
+      return null;
+    }
+
+    const spawnRate = this.getMovingStepSpawnRateByScore(currentScore);
+    if (spawnRate <= 0) {
+      return null;
+    }
+
+    if (Math.random() >= spawnRate) {
+      return null;
+    }
+
+    return {
+      hasTriggered: false
+    };
+  }
+
+  triggerMovingStepIfNeeded(currentStepIndex, currentScore = 0) {
+    const triggerDistance = this.getMovingStepTriggerDistanceByScore(currentScore);
+    const triggerStepIndex = currentStepIndex + triggerDistance;
+    const targetStep = this.getStep(triggerStepIndex);
+
+    if (!targetStep?.moveData || targetStep.moveData.hasTriggered) {
+      return false;
+    }
+
+    for (
+      let stepIndex = triggerStepIndex;
+      stepIndex < this.steps.length;
+      stepIndex += 1
+    ) {
+      const step = this.steps[stepIndex];
+      step.lane = this.reverseLane(step.lane);
+    }
+
+    targetStep.moveData.hasTriggered = true;
+    return true;
+  }
+
+  getMovingStepSpawnRateByScore(score) {
+    const safeScore = Math.max(0, Number(score) || 0);
+
+    if (safeScore < this.gameConfig.movingStepEnabledScore) {
+      return 0;
+    }
+
+    const scoreBand =
+      Math.floor((safeScore - this.gameConfig.movingStepEnabledScore) / 100);
+
+    const rate =
+      this.gameConfig.movingStepSpawnRateBase +
+      scoreBand * this.gameConfig.movingStepSpawnRateIncreasePer100Score;
+
+    return Math.min(this.gameConfig.movingStepSpawnRateMax, rate);
+  }
+
+  getMovingStepTriggerDistanceByScore(score) {
+    const safeScore = Math.max(0, Number(score) || 0);
+
+    if (safeScore > this.gameConfig.movingStepHardModeScore) {
+      return this.gameConfig.movingStepTriggerDistanceHard;
+    }
+
+    return this.gameConfig.movingStepTriggerDistanceEasy;
+  }
+
+  reverseLane(lane) {
+    return lane === "left" ? "right" : "left";
   }
 
   createObstacleData(isStartStep, currentScore, themeIndex) {
@@ -97,11 +170,27 @@ export class StepManager {
     return Math.min(1, rate);
   }
 
-  getThemeIndexByScore(score) {
-    const safeScore = Math.max(0, Number(score) || 0);
-    const themeIndex = Math.floor(safeScore / this.renderConfig.scorePerTheme);
-    return Math.min(themeIndex, THEME_ASSETS.length - 1);
+getThemeIndexByScore(score) {
+  const safeScore = Math.max(0, Number(score) || 0);
+
+  if (safeScore <= 100) {
+    return 0; // theme_00
   }
+
+  if (safeScore <= 200) {
+    return 1; // theme_01
+  }
+
+  if (safeScore <= 500) {
+    return 2; // theme_02
+  }
+
+  if (safeScore <= 1000) {
+    return 3; // theme_03
+  }
+
+  return 4; // theme_04
+}
 
   getThemeAsset(themeIndex) {
     const safeIndex = Math.max(0, Math.min(themeIndex, THEME_ASSETS.length - 1));

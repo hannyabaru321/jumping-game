@@ -1,5 +1,4 @@
 import {
-  ASSET_PATHS,
   PLAYER_ANIMATION_CONFIG,
   RENDER_CONFIG,
   STEP_STATE,
@@ -27,18 +26,18 @@ export class GameRenderer {
     this.activeBackgroundLayerKey = "A";
   }
 
-getRenderMetrics() {
-  const boardRect = this.dom.gameBoard.getBoundingClientRect();
-  const boardWidth = boardRect.width;
-  const boardHeight = boardRect.height;
+  getRenderMetrics() {
+    const boardRect = this.dom.gameBoard.getBoundingClientRect();
+    const boardWidth = boardRect.width;
+    const boardHeight = boardRect.height;
 
-  return {
-    baseX: boardWidth * 0.5,
-    baseY: boardHeight * 0.85,
-    stepOffsetX: boardWidth * 0.10,
-    stepOffsetY: boardHeight * 0.07
-  };
-}
+    return {
+      baseX: boardWidth * 0.5,
+      baseY: boardHeight * 0.85,
+      stepOffsetX: boardWidth * 0.10,
+      stepOffsetY: boardHeight * 0.07
+    };
+  }
 
   clearPlayfield() {
     this.dom.worldLayer.innerHTML = "";
@@ -88,10 +87,10 @@ getRenderMetrics() {
     this.currentBackgroundThemeIndex = nextThemeIndex;
   }
 
-  createPlayer() {
+  createPlayer(playerSrc) {
     const player = document.createElement("img");
     player.className = "player player-facing-right";
-    player.src = ASSET_PATHS.player;
+    player.src = playerSrc;
     player.alt = "player";
 
     this.dom.playfield.appendChild(player);
@@ -337,27 +336,27 @@ getRenderMetrics() {
     );
   }
 
-calculateTilePosition(relativeIndex, cumulativeOffsetX) {
-  const metrics = this.getRenderMetrics();
+  calculateTilePosition(relativeIndex, cumulativeOffsetX) {
+    const metrics = this.getRenderMetrics();
 
-  return {
-    x: metrics.baseX + cumulativeOffsetX * metrics.stepOffsetX,
-    y: metrics.baseY - relativeIndex * metrics.stepOffsetY
-  };
-}
+    return {
+      x: metrics.baseX + cumulativeOffsetX * metrics.stepOffsetX,
+      y: metrics.baseY - relativeIndex * metrics.stepOffsetY
+    };
+  }
 
-calculateObstaclePosition(relativeIndex, cumulativeOffsetX, candidate) {
-  const metrics = this.getRenderMetrics();
+  calculateObstaclePosition(relativeIndex, cumulativeOffsetX, candidate) {
+    const metrics = this.getRenderMetrics();
 
-  return {
-    x:
-      metrics.baseX +
-      (cumulativeOffsetX + candidate.x) * metrics.stepOffsetX,
-    y:
-      metrics.baseY -
-      (relativeIndex + candidate.y) * metrics.stepOffsetY
-  };
-}
+    return {
+      x:
+        metrics.baseX +
+        (cumulativeOffsetX + candidate.x) * metrics.stepOffsetX,
+      y:
+        metrics.baseY -
+        (relativeIndex + candidate.y) * metrics.stepOffsetY
+    };
+  }
 
   getTileImagePath(step, stepIndex, highScore) {
     const themeAsset = this.getThemeAsset(step.themeIndex);
@@ -389,8 +388,24 @@ calculateObstaclePosition(relativeIndex, cumulativeOffsetX, candidate) {
 
   getThemeIndexByScore(score) {
     const safeScore = Math.max(0, Number(score) || 0);
-    const themeIndex = Math.floor(safeScore / this.renderConfig.scorePerTheme);
-    return Math.min(themeIndex, THEME_ASSETS.length - 1);
+
+    if (safeScore <= 100) {
+      return 0;
+    }
+
+    if (safeScore <= 200) {
+      return 1;
+    }
+
+    if (safeScore <= 500) {
+      return 2;
+    }
+
+    if (safeScore <= 1000) {
+      return 3;
+    }
+
+    return 4;
   }
 
   setPlayerDirection(lane) {
@@ -445,21 +460,37 @@ calculateObstaclePosition(relativeIndex, cumulativeOffsetX, candidate) {
     this.dom.overlay.classList.add("hidden");
   }
 
-  showGameOverOverlay(score, reasonText, onRestart) {
+    showGameOverOverlay(score, reasonText, onRestart) {
     this.dom.overlay.innerHTML = `
-      <div class="overlay-card">
+        <div class="overlay-card">
         <h2 class="overlay-title">Game Over</h2>
         <p class="overlay-text">${this.escapeHtml(reasonText)}</p>
         <p class="overlay-text">今回のスコア: <strong>${score}</strong></p>
-        <button id="restartButton" class="primary-button" type="button">もう一度遊ぶ</button>
-      </div>
+
+        <button id="submitScoreButton" class="primary-button" type="button">
+            スコア送信
+        </button>
+
+        <button id="restartButton" class="primary-button" type="button">
+            もう一度遊ぶ
+        </button>
+
+        <div class="menu-row">
+            <button id="btnSettingsGameOver" class="primary-button sub-button" type="button">
+            設定
+            </button>
+            <button id="btnRankingGameOver" class="primary-button sub-button" type="button">
+            ランキング
+            </button>
+        </div>
+        </div>
     `;
 
     this.dom.overlay.classList.remove("hidden");
 
     const restartButton = document.getElementById("restartButton");
     restartButton.addEventListener("click", onRestart);
-  }
+    }
 
   escapeHtml(text) {
     return text
