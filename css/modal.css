@@ -229,10 +229,24 @@
 /* =========================================================
    5. ランキング表示
    ========================================================= */
+#modalRanking .modal-card {
+  width: min(100%, 390px);
+  max-height: min(80dvh, 560px);
+  display: flex;
+  flex-direction: column;
+}
+
 #rankingList {
   margin: 10px 0;
-  padding: 0;
+  padding: 10px;
   list-style: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  min-height: 0;
+  max-height: 260px;
+  border-radius: 14px;
+  background: #eef1f7;
 }
 
 #rankingList li {
