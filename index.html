@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>Jumping Game</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <div class="game-shell">
@@ -23,75 +23,139 @@
       <div id="playfield" class="playfield">
         <div id="backgroundLayerA" class="background-layer visible"></div>
         <div id="backgroundLayerB" class="background-layer"></div>
+        <div id="effectLayer" class="effect-layer"></div>
         <div id="worldLayer" class="world-layer"></div>
       </div>
 
-      <!-- スタート画面 -->
       <div id="overlay" class="overlay">
         <div class="overlay-card">
           <h1 class="overlay-title">Jumping Game</h1>
+          <button id="startButton" class="primary-button" type="button">スタート</button>
 
-          <!-- 1段目 -->
-          <button id="startButton" class="primary-button">スタート</button>
-
-          <!-- 2段目 -->
           <div class="menu-row">
-            <button id="btnSettings" class="primary-button sub-button">設定</button>
-            <button id="btnRanking" class="primary-button sub-button">ランキング</button>
+            <button id="btnSettings" class="primary-button sub-button" type="button">設定</button>
+            <button id="btnRanking" class="primary-button sub-button" type="button">ランキング</button>
           </div>
         </div>
       </div>
 
-      <!-- =====================
-           設定ダイアログ
-      ===================== -->
-<div id="modalSettings" class="modal hidden">
-  <div class="modal-card modal-card-settings">
-    <h2 class="modal-title">プレイヤー設定</h2>
+      <div id="modalSettings" class="modal hidden">
+        <div class="modal-card modal-card-settings">
+          <h2 class="modal-title">プレイヤー設定</h2>
 
-    <input id="inputName" type="text" placeholder="名前を入力" />
+          <div class="settings-section">
+            <div class="settings-label">プレイヤー名</div>
+            <input id="inputName" type="text" placeholder="名前を入力" />
+          </div>
 
-    <div class="settings-section">
-      <div class="settings-label">キャラ選択</div>
+          <div class="settings-section">
+            <div class="settings-label">キャラ選択</div>
 
-      <div class="chara-list-wrap">
-        <div class="chara-list">
-          <img src="assets/chara/bear_01.png" data-id="bear_01" class="chara-item" />
-          <img src="assets/chara/bear_02.png" data-id="bear_02" class="chara-item" />
-          <img src="assets/chara/bear_03.png" data-id="bear_03" class="chara-item" />
-          <img src="assets/chara/bear_04.png" data-id="bear_04" class="chara-item" />
-          <img src="assets/chara/bear_05.png" data-id="bear_05" class="chara-item" />
-          <img src="assets/chara/bear_06.png" data-id="bear_06" class="chara-item" />
+            <div class="chara-list-wrap">
+              <div class="chara-list">
+                <button type="button" class="chara-button" data-id="chara_01">
+                  <span class="chara-new-badge hidden">NEW</span>
+                  <img src="assets/chara/chara_01.png" data-id="chara_01" class="chara-item" alt="くま1" />
+                </button>
+
+                <button type="button" class="chara-button" data-id="chara_02">
+                  <span class="chara-new-badge hidden">NEW</span>
+                  <img src="assets/chara/chara_02.png" data-id="chara_02" class="chara-item" alt="くま2" />
+                </button>
+
+                <button type="button" class="chara-button" data-id="chara_03">
+                  <span class="chara-new-badge hidden">NEW</span>
+                  <img src="assets/chara/chara_03.png" data-id="chara_03" class="chara-item" alt="くま3" />
+                </button>
+
+                <button type="button" class="chara-button" data-id="chara_04">
+                  <span class="chara-new-badge hidden">NEW</span>
+                  <img src="assets/chara/chara_04.png" data-id="chara_04" class="chara-item" alt="くま4" />
+                </button>
+
+                <button type="button" class="chara-button" data-id="chara_05">
+                  <span class="chara-new-badge hidden">NEW</span>
+                  <img src="assets/chara/chara_05.png" data-id="chara_05" class="chara-item" alt="くま5" />
+                </button>
+
+                <button type="button" class="chara-button" data-id="chara_06">
+                  <span class="chara-new-badge hidden">NEW</span>
+                  <img src="assets/chara/chara_06.png" data-id="chara_06" class="chara-item" alt="くま6" />
+                </button>
+
+                <button type="button" class="chara-button" data-id="chara_07">
+                  <span class="chara-new-badge hidden">NEW</span>
+                  <img src="assets/chara/chara_07.png" data-id="chara_07" class="chara-item" alt="くま7" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-button-row">
+            <button id="saveSettings" class="primary-button" type="button">保存</button>
+            <button class="backButton primary-button" type="button">戻る</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="modal-button-row">
-      <button id="saveSettings" class="primary-button">保存</button>
-      <button class="backButton primary-button">戻る</button>
-    </div>
-  </div>
-</div>
-
-      <!-- =====================
-           ランキングダイアログ
-      ===================== -->
       <div id="modalRanking" class="modal hidden">
         <div class="modal-card">
           <h2 class="modal-title">ランキング</h2>
-
           <ul id="rankingList"></ul>
+          <button class="backButton primary-button" type="button">戻る</button>
+        </div>
+      </div>
 
-          <button class="backButton primary-button">戻る</button>
+      <div id="unlockModal" class="modal hidden">
+        <div class="modal-card unlock-modal-card">
+          <div class="unlock-title">キャラ解放！</div>
+          <img id="unlockCharacterImage" class="unlock-character-image" src="" alt="unlock character" />
+          <div id="unlockCharacterName" class="unlock-character-name"></div>
+          <div class="unlock-text">新しいキャラクターが使えるようになりました</div>
+          <button id="unlockModalCloseButton" class="primary-button" type="button">OK</button>
+        </div>
+      </div>
+
+      <div id="lockedCharacterModal" class="modal hidden">
+        <div class="modal-card locked-character-modal-card">
+          <div class="modal-title">未解放キャラ</div>
+          <img id="lockedCharacterImage" class="unlock-character-image" src="" alt="locked character" />
+          <div id="lockedCharacterName" class="unlock-character-name"></div>
+          <div id="lockedCharacterCondition" class="unlock-text"></div>
+          <button id="lockedCharacterModalCloseButton" class="primary-button" type="button">OK</button>
         </div>
       </div>
     </div>
 
     <div class="controls">
-      <button id="leftButton" class="control-button">← 左へ進む</button>
-      <button id="rightButton" class="control-button">右へ進む →</button>
+      <button id="leftButton" class="control-button" type="button">← 左へ進む</button>
+      <button id="rightButton" class="control-button" type="button">右へ進む →</button>
     </div>
   </div>
+  <div class="preview-panel" id="previewPanel">
+  <div class="preview-panel-title">演出プレビュー</div>
+
+  <div class="preview-row">
+    <label for="previewScoreRange">見た目用スコア</label>
+    <input id="previewScoreRange" type="range" min="0" max="1400" step="10" value="0" />
+  </div>
+
+  <div class="preview-row preview-row-inline">
+    <input id="previewScoreInput" type="number" min="0" max="1400" step="10" value="0" />
+    <button id="previewApplyButton" class="primary-button sub-button" type="button">
+      反映
+    </button>
+    <button id="previewClearButton" class="primary-button sub-button" type="button">
+      解除
+    </button>
+  </div>
+
+  <div class="preview-note">
+    実スコア: <span id="previewActualScore">0</span> /
+    表示スコア: <span id="previewVisualScore">0</span> /
+    演出: <span id="previewEffectName">なし</span>
+  </div>
+</div>
 
   <script type="module" src="js/main.js"></script>
 </body>

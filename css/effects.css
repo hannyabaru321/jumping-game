@@ -1,0 +1,237 @@
+/* =========================================================
+   effects.css
+   ステージ演出専用のスタイルシート
+
+   ■ 役割
+   - 落ち葉
+   - 砂嵐
+   - 雪
+   - 日差し
+   - 隕石
+
+   ■ 注意
+   - effect-layer / effect-item の土台定義は style.css 側にある
+   - ここでは演出そのものの見た目とアニメーションのみを定義する
+   ========================================================= */
+
+/* =========================================================
+   1. ステージ演出：落ち葉
+   ========================================================= */
+.effect-leaves .effect-leaf {
+  border-radius: 70% 30% 70% 30%;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(190, 229, 110, 0.95),
+      rgba(80, 155, 65, 0.95)
+    );
+  filter: hue-rotate(var(--leaf-hue, 0deg));
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
+  opacity: 0;
+  animation: leafFloat linear infinite;
+}
+
+@keyframes leafFloat {
+  0% {
+    transform: translate(-10vw, 0) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.95;
+  }
+
+  50% {
+    transform: translate(55vw, var(--leaf-drift, 0px)) rotate(180deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(115vw, calc(var(--leaf-drift, 0px) + 20px))
+      rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   2. ステージ演出：砂嵐
+   ========================================================= */
+.effect-sand .effect-sand-streak {
+  width: 60%;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(241, 219, 169, 0),
+      rgba(241, 219, 169, 0.85),
+      rgba(241, 219, 169, 0)
+    );
+  filter: blur(3px);
+  animation: sandStreakMove linear infinite;
+}
+
+/* 使われる可能性を残して定義を維持 */
+@keyframes sandHazeMove {
+  0% {
+    transform: translateX(-20%);
+  }
+
+  100% {
+    transform: translateX(20%);
+  }
+}
+
+@keyframes sandStreakMove {
+  0% {
+    transform: translateX(-60vw) translateY(0) rotate(-10deg);
+  }
+
+  100% {
+    transform: translateX(120vw) translateY(8px) rotate(-10deg);
+  }
+}
+
+/* =========================================================
+   3. ステージ演出：雪
+   ========================================================= */
+.effect-snow .effect-snow {
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.45);
+  opacity: 0;
+  animation: snowFall linear infinite;
+}
+
+@keyframes snowFall {
+  0% {
+    transform: translate(0, -10vh);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.95;
+  }
+
+  100% {
+    transform: translate(var(--snow-drift, 0px), 110vh);
+    opacity: 0.1;
+  }
+}
+
+/* =========================================================
+   4. ステージ演出：日差し
+   ========================================================= */
+.effect-sunray .effect-sunray-glow {
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 255, 240, 0.38),
+      rgba(255, 255, 240, 0.08) 45%,
+      rgba(255, 255, 240, 0) 75%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.18),
+      rgba(255, 255, 255, 0.05) 45%,
+      rgba(255, 255, 255, 0.12)
+    );
+  backdrop-filter: blur(1px);
+  animation: sunGlowPulse 3.2s ease-in-out infinite alternate;
+}
+
+.effect-sunray .effect-sunray-beam {
+  top: -15%;
+  height: 150%;
+  transform-origin: top center;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 240, 0.55),
+      rgba(255, 255, 240, 0.18) 35%,
+      rgba(255, 255, 240, 0.04) 70%,
+      rgba(255, 255, 240, 0)
+    );
+  filter: blur(3px);
+  opacity: 0.35;
+  animation: sunrayShimmer ease-in-out infinite alternate;
+}
+
+@keyframes sunGlowPulse {
+  from {
+    opacity: 0.55;
+  }
+
+  to {
+    opacity: 0.95;
+  }
+}
+
+@keyframes sunrayShimmer {
+  from {
+    opacity: 0.18;
+  }
+
+  to {
+    opacity: 0.42;
+  }
+}
+
+/* =========================================================
+   5. ステージ演出：隕石
+   ========================================================= */
+.effect-meteor .effect-meteor-rock {
+  position: absolute;
+  animation: meteorRockMove linear infinite;
+}
+
+.effect-meteor .effect-meteor-rock-core {
+  position: absolute;
+  inset: 0;
+  background: url("assets/effects/meteor.png") center / contain no-repeat;
+  opacity: 1;
+  filter: none;
+  animation: meteorRockRotate var(--meteor-rotate-duration, 14s) linear
+    infinite;
+}
+
+.effect-meteor .effect-meteor-rock::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 58%;
+  width: 130%;
+  height: 34%;
+  transform: translateY(-50%) rotate(-8deg);
+  transform-origin: left center;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 210, 140, 0.45),
+    rgba(255, 160, 100, 0.2),
+    rgba(255, 120, 80, 0)
+  );
+  filter: blur(10px);
+  z-index: -1;
+}
+
+@keyframes meteorRockMove {
+  0% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-65vw, 80vh);
+    opacity: 1;
+  }
+}
+
+@keyframes meteorRockRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

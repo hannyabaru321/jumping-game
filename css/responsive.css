@@ -1,0 +1,54 @@
+/* =========================================================
+   responsive.css
+   レスポンシブ調整専用のスタイルシート
+
+   ■ 役割
+   - 画面幅が小さい場合のサイズ調整
+   - モバイル表示時の余白・入力UI調整
+
+   ■ 注意
+   - CSS変数の上書きもここで行う
+   - ベース定義は style.css / modal.css 側に存在する
+   ========================================================= */
+
+/* =========================================================
+   1. 画面幅 600px 以下の調整
+   ========================================================= */
+@media (max-width: 600px) {
+  :root {
+    --tile-width: var(--tile-width-mobile);
+    --player-width: var(--player-width-mobile);
+    --tile-anchor-y: -70%;
+    --player-bottom: 100px;
+  }
+
+  .game-shell {
+    width: 100%;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .game-board {
+    height: var(--board-height-mobile);
+  }
+
+  .hud-card {
+    padding: 10px;
+  }
+
+  .hud-value {
+    font-size: 20px;
+  }
+
+  .preview-panel {
+    padding: 10px 12px;
+  }
+
+  .preview-row-inline {
+    flex-wrap: wrap;
+  }
+
+  #previewScoreInput {
+    width: 100%;
+  }
+}

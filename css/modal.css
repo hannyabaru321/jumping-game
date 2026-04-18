@@ -1,0 +1,407 @@
+/* =========================================================
+   modal.css
+   モーダル・オーバーレイ・設定UI・ランキングUI 用スタイル
+
+   ■ 役割
+   - 開始/終了などのオーバーレイ
+   - 設定画面
+   - キャラ選択UI
+   - ランキングUI
+   - 解放/未解放モーダル
+   - プレビュー用パネル
+   - ボタン共通
+   - hidden 制御
+
+   ■ 注意
+   - hidden 制御は最後にまとめている
+   - コメントは削除しない前提で維持する
+   ========================================================= */
+
+/* =========================================================
+   1. オーバーレイ・モーダル
+   ========================================================= */
+.overlay,
+.modal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(16, 27, 47, 0.28);
+}
+
+.overlay {
+  z-index: 3000;
+}
+
+.modal {
+  z-index: 4000;
+}
+
+.overlay-card,
+.modal-card {
+  width: min(100%, 360px);
+  padding: 22px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.overlay-title,
+.modal-title {
+  margin: 0 0 18px;
+  font-size: 24px;
+}
+
+.overlay-text,
+.unlock-text {
+  margin: 8px 0;
+  line-height: 1.6;
+  color: var(--text-sub);
+}
+
+/* =========================================================
+   2. ボタン共通
+   ========================================================= */
+.primary-button {
+  margin-top: 14px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  background: var(--accent);
+  box-shadow: 0 10px 20px rgba(81, 135, 219, 0.28);
+}
+
+.menu-row,
+.modal-button-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.menu-row {
+  margin-top: 10px;
+}
+
+.modal-button-row {
+  margin-top: 18px;
+}
+
+.sub-button {
+  flex: 1;
+  min-width: 110px;
+  font-size: 14px;
+  padding: 10px;
+}
+
+/* =========================================================
+   3. 設定モーダル
+   ========================================================= */
+.modal-card-settings {
+  width: min(100%, 390px);
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.settings-label {
+  width: 100%;
+  max-width: 260px;
+  margin-bottom: 10px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+
+#inputName {
+  width: 100%;
+  max-width: 260px;
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  color: var(--text-main);
+  background: #eef1f7;
+  outline: none;
+}
+
+/* =========================================================
+   4. キャラクター選択UI
+   ========================================================= */
+.chara-list-wrap {
+  width: 100%;
+  max-width: 260px;
+  height: 190px;
+  padding: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 14px;
+  background: #eef1f7;
+}
+
+.chara-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  justify-items: center;
+}
+
+.chara-button {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.chara-item {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.75);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.chara-item:hover {
+  transform: scale(1.06);
+}
+
+.chara-item.selected {
+  border-color: #ffcc00;
+  box-shadow: 0 6px 14px rgba(255, 204, 0, 0.35);
+  transform: scale(1.06);
+}
+
+.chara-item.locked {
+  opacity: 0.45;
+  filter: grayscale(100%);
+}
+
+.chara-new-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  z-index: 2;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  background: #ff5f7a;
+  box-shadow: 0 4px 10px rgba(255, 95, 122, 0.35);
+  animation: newBadgePop 1s ease-in-out infinite alternate;
+}
+
+@keyframes newBadgePop {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.08);
+  }
+}
+
+/* =========================================================
+   5. ランキング表示
+   ========================================================= */
+#rankingList {
+  margin: 10px 0;
+  padding: 0;
+  list-style: none;
+}
+
+#rankingList li {
+  margin-bottom: 6px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-radius: 10px;
+  background: #f3f6fa;
+}
+
+.ranking-character-image {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+/* =========================================================
+   6. 解放モーダル / 未解放モーダル
+   ========================================================= */
+.unlock-modal-card,
+.locked-character-modal-card {
+  width: min(100%, 340px);
+  animation: unlockModalPop 240ms ease;
+}
+
+@keyframes unlockModalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.unlock-title {
+  margin-bottom: 14px;
+  font-size: 26px;
+  font-weight: 800;
+  color: #ff9f1c;
+}
+
+.unlock-character-image {
+  width: 110px;
+  height: 110px;
+  margin-bottom: 10px;
+  object-fit: contain;
+  animation: unlockCharacterFloat 900ms ease-in-out infinite alternate;
+}
+
+@keyframes unlockCharacterFloat {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-8px);
+  }
+}
+
+.unlock-character-name {
+  margin-bottom: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* =========================================================
+   7. 操作ボタン（主にモバイル用）
+   ========================================================= */
+.controls {
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.control-button {
+  min-height: 72px;
+  padding: 16px 12px;
+  border: none;
+  border-radius: 18px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  cursor: pointer;
+  background: var(--panel-bg);
+  box-shadow: var(--shadow);
+}
+
+.danger-text {
+  font-weight: 700;
+  color: var(--danger);
+}
+
+/* =========================================================
+   8. プレビュー用パネル
+   ---------------------------------------------------------
+   背景確認やスコア確認などのデバッグ/確認用UI。
+   ========================================================= */
+.preview-panel {
+  margin-top: 6px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow);
+}
+
+.preview-panel-title {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.preview-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.preview-row-inline {
+  flex-direction: row;
+  align-items: center;
+}
+
+.preview-row label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+
+#previewScoreRange {
+  width: 100%;
+}
+
+#previewScoreInput {
+  width: 90px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  background: #eef1f7;
+  outline: none;
+}
+
+.preview-note {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-sub);
+}
+
+/* =========================================================
+   9. 非表示制御
+   ---------------------------------------------------------
+   モーダルや補助画面を hidden で確実に消す。
+   元ファイルでは .hidden 定義が複数箇所にあったため、
+   最終的な適用箇所をここに集約している。
+   ========================================================= */
+.hidden,
+.modal.hidden,
+#modalSettings.hidden,
+#modalRanking.hidden,
+#unlockModal.hidden,
+#lockedCharacterModal.hidden {
+  display: none !important;
+}
